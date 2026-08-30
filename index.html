@@ -30,9 +30,66 @@
         .mt {
           font-weight: bold;
         }
+        .music-toggle {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background-color: #333;
+          color: #0f0;
+          border: 2px solid #0f0;
+          padding: 8px 14px;
+          font-family: 'Courier New', Courier, monospace;
+          font-weight: bold;
+          font-size: 14px;
+          cursor: pointer;
+          z-index: 1000;
+          box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+        .music-toggle:hover {
+          background-color: #0f0;
+          color: #000;
+        }
     </style>
 </head>
 <body>
+
+<audio id="bg-music" src="download.mp3" loop autoplay></audio>
+<button id="music-btn" class="music-toggle" aria-label="Toggle music">🔊 Pause Music</button>
+
+<script>
+  const audio = document.getElementById('bg-music');
+  const musicBtn = document.getElementById('music-btn');
+
+  function updateButtonText() {
+    if (audio.paused) {
+      musicBtn.textContent = '🔈 Play Music';
+    } else {
+      musicBtn.textContent = '🔊 Pause Music';
+    }
+  }
+
+  audio.addEventListener('play', updateButtonText);
+  audio.addEventListener('pause', updateButtonText);
+
+  // Attempt autoplay when DOM is ready
+  window.addEventListener('DOMContentLoaded', () => {
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Autoplay prevented by browser security policy
+        updateButtonText();
+      });
+    }
+  });
+
+  musicBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play().catch(() => {});
+    } else {
+      audio.pause();
+    }
+  });
+</script>
 
 <h1>The Kardashians' custom AssaultCube map repo</h1>
 
